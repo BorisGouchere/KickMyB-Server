@@ -69,4 +69,13 @@ public class ControllerTask {
         UserDetails ud = (UserDetails) authentication.getPrincipal();
         return serviceTask.userFromUsername(ud.getUsername());
     }
+
+    @GetMapping("/api/delete/{id}")
+    public @ResponseBody String deleteTask(@PathVariable long id) throws ServiceTask.NotFound, ServiceTask.NotAllowed {
+        System.out.println("KICKB SERVER : Delete task : " + id);
+        ConfigHTTP.attenteArticifielle();
+        MUser user = currentUser();
+        serviceTask.deleteTask(id, user);
+        return "";
+    }
 }

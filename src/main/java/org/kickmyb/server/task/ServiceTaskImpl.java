@@ -180,4 +180,12 @@ public class ServiceTaskImpl implements ServiceTask {
         return response;
     }
 
+    @Override
+    public void deleteTask(long taskID, MUser user) throws NotFound, NotAllowed {
+        MTask element = repo.findById(taskID).orElseThrow(() -> new NotFound());
+        if (!user.tasks.contains(element)) throw new NotAllowed();
+        user.tasks.remove(element);
+        repoUser.save(user);
+        repo.delete(element);
+    }
 }
