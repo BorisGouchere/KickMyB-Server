@@ -182,10 +182,13 @@ public class ServiceTaskImpl implements ServiceTask {
 
     @Override
     public void deleteTask(long taskID, MUser user) throws NotFound, NotAllowed {
-        MTask element = repo.findById(taskID).orElseThrow(() -> new NotFound());
-        if (!user.tasks.contains(element)) throw new NotAllowed();
-        user.tasks.remove(element);
+        MTask task = repo.findById(taskID).orElseThrow(() -> new NotFound());
+        boolean isOwner = user.tasks.stream().anyMatch(t -> t.id.equals(taskID));
+
+        if (!isOwner) throw new NotAllowed();
+        user.tasks.removeIf(t -> t.id.equals(taskID));
+
         repoUser.save(user);
-        repo.delete(element);
+        repo.delete(task);
     }
 }
