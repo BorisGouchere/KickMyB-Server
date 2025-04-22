@@ -129,6 +129,7 @@ class ServiceTaskTests {
         // Vérification que la tâche a été ajoutée
         assertEquals(1, serviceTask.home(user.id).size());
         // récupération de l'utilisateur après la création de la tâche
+        //user = serviceTask.userFromUsername(user.username);
         user = userRepository.findById(user.id).get();
         long taskID = serviceTask.home(user.id).get(0).id;
         // Suppression de la tâche
@@ -144,7 +145,7 @@ class ServiceTaskTests {
         user.password = passwordEncoder.encode("Passw0rd!");
         userRepository.saveAndFlush(user);
        try {
-           serviceTask.deleteTask(1, user);
+           serviceTask.deleteTask(1L, user);
               fail("Aurait dû lancer ServiceTask.NotFound");
        } catch (Exception e) {
            assertEquals(ServiceTask.NotFound.class, e.getClass());
@@ -183,5 +184,8 @@ class ServiceTaskTests {
         } catch (Exception e) {
             assertEquals(ServiceTask.NotAllowed.class, e.getClass());
         }
+        // Vérification que la tâche d'Alice est toujours présente
+        aliceTasks = serviceTask.home(user.id);
+        assertEquals(1, aliceTasks.size());
     }
 }
