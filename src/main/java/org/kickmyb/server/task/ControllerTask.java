@@ -34,10 +34,11 @@ public class ControllerTask {
     }
 
     @GetMapping(value = "/api/progress/{taskID}/{value}", produces = "text/plain")
-    public @ResponseBody String updateProgress(@PathVariable long taskID, @PathVariable int value) {
+    public @ResponseBody String updateProgress(@PathVariable long taskID, @PathVariable int value) throws ServiceTask.NotFound, ServiceTask.NotAllowed {
         System.out.println("KICKB SERVER : Progress for task : " + taskID + " @" + value);
         ConfigHTTP.attenteArticifielle();
-        serviceTask.updateProgress(taskID, value);
+        MUser user = currentUser();
+        serviceTask.updateProgress(taskID, value, user);
         return "";
     }
 

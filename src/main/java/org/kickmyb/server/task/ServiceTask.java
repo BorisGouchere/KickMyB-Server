@@ -15,7 +15,7 @@ public interface ServiceTask {
     // entity handling
     TaskDetailResponse detail(Long id, MUser user);
     void addOne(AddTaskRequest req, MUser user) throws Existing, Empty, TooShort;
-    void updateProgress(long taskID, int value);
+    void updateProgress(long taskID, int value, MUser user) throws NotFound, NotAllowed;
     List<HomeItemResponse> home(Long userID);
     TaskDetailPhotoResponse detailPhoto(Long id, MUser user);
     List<HomeItemPhotoResponse> homePhoto(Long userID);
